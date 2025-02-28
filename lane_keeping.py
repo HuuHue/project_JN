@@ -27,13 +27,19 @@ def gstreamer_pipeline(
             display_height,
         )
     )
+def canny(video):
+    blur_video = cv2.blur(video, (5, 5))
+    canny_video = cv2.Canny(blur_video, 50, 150)
+    return canny_video
+
 
 window_title = "CSI Camera"
 video_capture = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
 while True:
     ret, frame = video_capture.read()
     gray_frame = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-    cv2.imshow(window_title, gray_frame)
+    canny_frame = canny(gray_frame)
+    cv2.imshow(window_title,canny_frame)
     keyCode = cv2.waitKey(10) & 0xFF       
     if keyCode == 27 or keyCode == ord('q'):
         break
